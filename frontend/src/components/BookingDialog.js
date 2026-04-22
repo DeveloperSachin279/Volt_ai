@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Share2 } from "lucide-react";
 import { bookSlot } from "@/lib/api";
 import { toast } from "sonner";
 
@@ -97,6 +97,19 @@ const BookingDialog = ({ open, onOpenChange, station, battery, required }) => {
             </div>
             <DialogFooter className="flex-col gap-2 sm:flex-row">
               <Button variant="outline" onClick={() => handleOpenChange(false)} className="rounded-full" data-testid="booking-close">Close</Button>
+              <Button
+                variant="outline"
+                data-testid="booking-whatsapp"
+                onClick={() => {
+                  const msg = encodeURIComponent(
+                    `🔋 VoltRoute booking confirmed!\n\nStation: ${confirmation.station_name}\nSlot: #${confirmation.slot_number}\nStart: ${new Date(confirmation.start_time).toLocaleString()}\nEnd: ${new Date(confirmation.end_time).toLocaleString()}\nBooking ID: ${confirmation.booking_id.slice(0, 8)}`
+                  );
+                  window.open(`https://wa.me/?text=${msg}`, "_blank", "noopener,noreferrer");
+                }}
+                className="rounded-full border-green-600 text-green-700 hover:bg-green-50"
+              >
+                <Share2 size={14} className="mr-1" /> Share on WhatsApp
+              </Button>
               <Link to="/bookings">
                 <Button onClick={() => handleOpenChange(false)} data-testid="booking-view-all" className="w-full rounded-full bg-green-600 px-6 text-white hover:bg-green-700">
                   View all bookings

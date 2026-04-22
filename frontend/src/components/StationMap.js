@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import L from "leaflet";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
 
 const buildIcon = ({ variant = "normal", label = "" }) => {
   const cls =
@@ -55,6 +55,12 @@ const StationMap = ({ stations = [], user, selected, best, onSelect, emergency =
     <Marker position={[user.lat, user.lng]} icon={userIcon}>
       <Popup>You are here</Popup>
     </Marker>
+    {best && (
+      <Polyline
+        positions={[[user.lat, user.lng], [best.lat, best.lng]]}
+        pathOptions={{ color: "#16a34a", weight: 4, opacity: 0.8, dashArray: "8 8" }}
+      />
+    )}
     {stations.map((s) => {
       const isBest = best && s.station_id === best.station_id;
       const variant = isBest ? "best" : emergency ? "emergency" : "normal";
